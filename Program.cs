@@ -4,7 +4,8 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Console.WriteLine("Hello, Nuran och Khattab!");
+            Console.WriteLine("Om ni ser detta så har ni använt Git Pull korrekt :)");
         }
     }
 }
