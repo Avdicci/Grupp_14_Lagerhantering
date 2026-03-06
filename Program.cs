@@ -1,5 +1,22 @@
 ﻿namespace Grupp_14_Lagerhantering
 {
+    public struct Produkt     // Produkt är för hur en produkt ser ut i lagret.
+    {
+        public int Id { get; set; }              // Produktens löpnummer, ex 1
+        public string Namn { get; set; }         // Produktens namn, ex "Hammare"
+        public double Pris { get; set; }         // Priset i kr, ex 49.90
+        public int Antal { get; set; }           // Hur många som finns i lager, ex 15
+
+        // SkrivUt skriver ut en produkts värden på skärmen.
+        // Används när vi vill visa lagret för användaren.
+        public void SkrivUt()
+        {
+            Console.WriteLine($"{Id} {Namn} {Pris} kr {Antal} st");
+
+        }
+
+    }
+
     internal class Program
     {
         static void Main(string[] args)
@@ -20,19 +37,19 @@
             {
                 // Där det står "Whatever" får varje person ändra till det relevanta man jobbar med
                 Console.Clear();
-                Console.WriteLine("A Öppna fil");
-                Console.WriteLine("B Visa värden");
-                Console.WriteLine("C Whatever");
-                Console.WriteLine("D Whatever");
-                Console.WriteLine("E Whatever");
-                Console.WriteLine("F Whatever");
-                Console.WriteLine("G Whatever");
+                Console.WriteLine("A Läs in fil");
+                Console.WriteLine("B Visa alla produkter");
+                Console.WriteLine("C Lägg till produkt");
+                Console.WriteLine("D Sök produkt");
+                Console.WriteLine("E Redigera produkt");
+                Console.WriteLine("F Ta bort produkt");
+                Console.WriteLine("G Sortera lager");
+                Console.WriteLine("H Skapa fil");
                 Console.WriteLine("X Avsluta");
-                Console.WriteLine("");
                 Console.Write("Ange val: ");
 
                 menyVal = Console.ReadLine().ToUpper();
-                Console.Write(""); // Tom rad för designs skull, don't touch
+                Console.Write(""); // Tom rad för designs skull
 
                 switch (menyVal)
                 {
@@ -44,19 +61,22 @@
                         // Här behöver vi skriva ut alla mätvärden i listan, det kan göras i en foreach loop
                         break;
                     case "C":
-                        // Vi får se vad vi gör
+                        // Lägg till en ny produkt i lagret och spara med append
                         break;
                     case "D":
-                        // Vi får se vad vi gör
+                        // Söker efter produkt
                         break;
                     case "E":
-                        // Vi får se vad vi gör
+                        // Redigerar en befintlig produkt via löpnummer
                         break;
                     case "F":
-                        // Vi får se vad vi gör
+                        // Tar bort en produkt via löpnummer
                         break;
                     case "G":
-                        // Vi får se vad vi gör
+                        // Sortera lagret på namn eller pris
+                        break;
+                    case "H":
+                        // Skapa fil med testdata, återställer filen om den blivit korrupt
                         break;
                     case "X":
                         avsluta = true;
