@@ -29,6 +29,7 @@
             string menyVal;
 
             // Här ska vi deklarera vår lista med all data från txt-filen
+            List<Produkt> Produkter = new List<Produkt>();                  //Lista med namnet Produkt som vår struct
 
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
@@ -56,6 +57,7 @@
                     case "A":
                         // Samma som Duggan, vi behöver läsa in filen och spara datan i en lista
                         Console.WriteLine("Fil inläst");
+                        (Produkter) = LasInFil();
                         break;
                     case "B":
                         // Här behöver vi skriva ut alla mätvärden i listan, det kan göras i en foreach loop
@@ -93,7 +95,23 @@
         } // Main method ends here
 
 
+        static List<Produkt> LasInFil()
+        {
+            List<Produkt> Produkter = new List<Produkt>();
 
+            string[] rader = File.ReadAllLines("Lagervarde.txt");
+            foreach (string rad in rader)
+            {
+                Produkt p = new Produkt();
+                string[] LasInFil = rad.Split(',');
 
+                p.Id = int.Parse(LasInFil[0]);
+                p.Namn = LasInFil[1];
+                p.Pris = double.Parse(LasInFil[2]);
+                p.Antal = int.Parse(LasInFil[3]);
+                Produkter.Add(p);
+            }
+            return Produkter;
+        }
     }
 }
