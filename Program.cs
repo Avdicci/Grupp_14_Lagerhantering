@@ -103,13 +103,15 @@
             foreach (string rad in rader)
             {
                 Produkt p = new Produkt();
-                string[] LasInFil = rad.Split(',');
+                string[] LasInFil = rad.Split(';');
 
                 p.Id = int.Parse(LasInFil[0]);
                 p.Namn = LasInFil[1];
                 p.Pris = double.Parse(LasInFil[2]);
                 p.Antal = int.Parse(LasInFil[3]);
                 Produkter.Add(p);
+                //Detta är bara för att se att det fungerar, tas bort senare:
+                //Console.WriteLine(p.Id + " Namn: " + p.Namn + " Pris: " + p.Pris + " Antal: ", p.Antal);
             }
             return Produkter;
         }
