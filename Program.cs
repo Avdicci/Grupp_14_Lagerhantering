@@ -63,6 +63,7 @@ namespace Grupp_14_Lagerhantering
                 {
                     case "A":
                         // Samma som Duggan, vi behöver läsa in filen och spara datan i en lista
+                        LäsInFrånFil(lager, filSökVäg);
                         Console.WriteLine("Fil inläst");
                         break;
                     case "B":
@@ -119,7 +120,7 @@ namespace Grupp_14_Lagerhantering
                 "9;Gipsskruv;45.00;500",
                 "10;Hyvel;299.00;2"
             };
-            StreamWriter writer = new StreamWriter("Lagervarde.txt");
+            StreamWriter writer = new StreamWriter(filSökVäg);
             
             foreach (string rad in rader)
             {
@@ -157,6 +158,21 @@ namespace Grupp_14_Lagerhantering
 
         }
 
+            string[] rader = File.ReadAllLines("Lagervarde.txt");
+            foreach (string rad in rader)
+            {
+                Produkt p = new Produkt();
+                string[] LasInFil = rad.Split(';');
 
+                p.Id = int.Parse(LasInFil[0]);
+                p.Namn = LasInFil[1];
+                p.Pris = double.Parse(LasInFil[2]);
+                p.Antal = int.Parse(LasInFil[3]);
+                Produkter.Add(p);
+                //Detta är bara för att se att det fungerar, tas bort senare:
+                //Console.WriteLine(p.Id + " Namn: " + p.Namn + " Pris: " + p.Pris + " Antal: ", p.Antal);
+            }
+            return Produkter;
+        }
     }
 }
