@@ -66,7 +66,7 @@ namespace Grupp_14_Lagerhantering
                         if (!File.Exists(filSökVäg))
                         {
                             Console.WriteLine("Filen finns inte. Skapa filen först (H).");
-                            return;
+                            break;
                         }
                         LäsInFrånFil(lager, filSökVäg);
                         Console.WriteLine("Fil inläst");
