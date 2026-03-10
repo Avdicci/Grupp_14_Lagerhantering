@@ -63,12 +63,21 @@ namespace Grupp_14_Lagerhantering
                 {
                     case "A":
                         // Samma som Duggan, vi behöver läsa in filen och spara datan i en lista
+                        if (!File.Exists(filSökVäg))
+                        {
+                            Console.WriteLine("Filen finns inte. Skapa filen först (H).");
+                            return;
+                        }
                         LäsInFrånFil(lager, filSökVäg);
                         Console.WriteLine("Fil inläst");
                         break;
                     case "B":
-                        // Här behöver vi skriva ut alla mätvärden i listan, det kan göras i en foreach loop
+                        foreach (Produkt p in lager)
+                        {
+                            p.SkrivUt();
+                        }
                         break;
+                    // Här behöver vi skriva ut alla mätvärden i listan, det kan göras i en foreach loop
                     case "C":
                         // Lägg till en ny produkt i lagret och spara med append
                         break;
@@ -109,19 +118,19 @@ namespace Grupp_14_Lagerhantering
         {
             string[] rader =
             {
-                "1;Hammare;49.90;15",
-                "2;Skruvmejsel;29.90;8",
-                "3;Spik 50mm;12.50;200",
-                "4;Träskiva 120x60;189.00;5",
-                "5;Slippapper grov;9.90;50",
-                "6;Målarpensel;35.00;20",
-                "7;Vattenpass;149.00;3",
-                "8;Borr 8mm;19.90;12",
-                "9;Gipsskruv;45.00;500",
-                "10;Hyvel;299.00;2"
+                "1;Hammare;49,90;15",
+                "2;Skruvmejsel;29,90;8",
+                "3;Spik 50mm;12,50;200",
+                "4;Träskiva 120x60;189,00;5",
+                "5;Slippapper grov;9,90;50",
+                "6;Målarpensel;35,00;20",
+                "7;Vattenpass;149,00;3",
+                "8;Borr 8mm;19,90;12",
+                "9;Gipsskruv;45,00;500",
+                "10;Hyvel;299,00;2"
             };
             StreamWriter writer = new StreamWriter(filSökVäg);
-            
+
             foreach (string rad in rader)
             {
                 writer.WriteLine(rad);
@@ -137,7 +146,7 @@ namespace Grupp_14_Lagerhantering
             string[] rader = File.ReadAllLines(filSökVäg);
             foreach (string rad in rader)
             {
-                string[] data = rad.Split(";");
+                string[] data = rad.Split(';');
 
                 int Id = int.Parse(data[0]);
                 string Namn = data[1];
@@ -152,27 +161,12 @@ namespace Grupp_14_Lagerhantering
                     Antal = Antal
                 };
                 lager.Add(p);
-                
+
 
             }
 
         }
 
-            string[] rader = File.ReadAllLines("Lagervarde.txt");
-            foreach (string rad in rader)
-            {
-                Produkt p = new Produkt();
-                string[] LasInFil = rad.Split(';');
 
-                p.Id = int.Parse(LasInFil[0]);
-                p.Namn = LasInFil[1];
-                p.Pris = double.Parse(LasInFil[2]);
-                p.Antal = int.Parse(LasInFil[3]);
-                Produkter.Add(p);
-                //Detta är bara för att se att det fungerar, tas bort senare:
-                //Console.WriteLine(p.Id + " Namn: " + p.Namn + " Pris: " + p.Pris + " Antal: ", p.Antal);
-            }
-            return Produkter;
-        }
     }
 }
