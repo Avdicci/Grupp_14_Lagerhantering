@@ -47,7 +47,7 @@ namespace Grupp_14_Lagerhantering
                 Console.Clear();
                 Console.WriteLine("A Läs in fil");
                 Console.WriteLine("B Visa alla produkter");
-                Console.WriteLine("C Lägg till produkt");
+                Console.WriteLine("C Hitta högsta ID");
                 Console.WriteLine("D Sök produkt");
                 Console.WriteLine("E Redigera produkt");
                 Console.WriteLine("F Ta bort produkt");
