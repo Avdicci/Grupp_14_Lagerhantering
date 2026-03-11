@@ -47,7 +47,7 @@ namespace Grupp_14_Lagerhantering
                 Console.Clear();
                 Console.WriteLine("A Läs in fil");
                 Console.WriteLine("B Visa alla produkter");
-                Console.WriteLine("C Lägg till produkt");
+                Console.WriteLine("C Hitta högsta ID");
                 Console.WriteLine("D Sök produkt");
                 Console.WriteLine("E Redigera produkt");
                 Console.WriteLine("F Ta bort produkt");
@@ -79,6 +79,7 @@ namespace Grupp_14_Lagerhantering
                         break;
                     // Här behöver vi skriva ut alla mätvärden i listan, det kan göras i en foreach loop
                     case "C":
+                        FinnHögstaID(lager);
                         // Lägg till en ny produkt i lagret och spara med append
                         break;
                     case "D":
@@ -166,7 +167,18 @@ namespace Grupp_14_Lagerhantering
             }
 
         }
+        static void FinnHögstaID(List<Produkt> lager)
+        {
+            double hogstaID = double.MinValue;
 
-
+            foreach (Produkt p in lager)
+            {
+                if (p.Id > hogstaID)
+                {
+                    hogstaID = p.Id;
+                }
+            }
+            Console.WriteLine("Det högsta ID numret är: " + hogstaID);
+        }
     }
 }
