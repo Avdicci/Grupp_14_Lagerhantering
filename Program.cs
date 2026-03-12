@@ -17,7 +17,7 @@ namespace Grupp_14_Lagerhantering
         }
         // Metoden returnerar en sträng som en rad i textfilen.
         // T.ex 1;Hammare;49.90;15
-        public string RetunerarRadTillFil()
+        public string ReturnerarRadTillFil()
         {
             return $"{Id};{Namn};{Pris};{Antal}";
         }
@@ -27,9 +27,6 @@ namespace Grupp_14_Lagerhantering
     {
         static void Main(string[] args)
         {
-            // Detta tar jag bort när alla har pullat
-            Console.WriteLine("Hello, Nuran och Khattab!");
-            Console.WriteLine("Om ni ser detta så har ni använt Git Pull korrekt :)");
 
             bool avsluta = false;
             string menyVal;
@@ -47,9 +44,9 @@ namespace Grupp_14_Lagerhantering
                 Console.Clear();
                 Console.WriteLine("A Läs in fil");
                 Console.WriteLine("B Visa alla produkter");
-                Console.WriteLine("C Hitta högsta ID");
-                Console.WriteLine("D Sök produkt");
-                Console.WriteLine("E Redigera produkt");
+                Console.WriteLine("C Lägg till Produkt");
+                Console.WriteLine("D Finn Högsta ID");
+                Console.WriteLine("E Sök Produkt");
                 Console.WriteLine("F Ta bort produkt");
                 Console.WriteLine("G Sortera lager");
                 Console.WriteLine("H Skapa fil");
@@ -87,10 +84,12 @@ namespace Grupp_14_Lagerhantering
                         // Lägg till en ny produkt i lagret och spara med append
                         break;
                     case "D":
-                        // Söker efter produkt
+                        // Söker efter högsta ID i lagret och returnerar det
+                        Console.WriteLine("Högsta ID: " + FinnHögstaID(lager));
                         break;
                     case "E":
-                        // Redigerar en befintlig produkt via löpnummer
+                        // Sök produkt
+                        SökProdukt();
                         break;
                     case "F":
                         // Tar bort en produkt via löpnummer
@@ -109,7 +108,7 @@ namespace Grupp_14_Lagerhantering
 
                 if (avsluta == false)
                 {
-                    Console.WriteLine("\nTryck valfri tangent för att återgå");
+                    Console.WriteLine("\nTryck valfri tangent för att gå tillbaka till menyn");
                     Console.ReadKey();
                 }
             }
@@ -166,11 +165,9 @@ namespace Grupp_14_Lagerhantering
                     Antal = Antal
                 };
                 lager.Add(p);
-
-
             }
-
         }
+
         static int FinnHögstaID(List<Produkt> lager)
         {
             int hogstaID = int.MinValue;
@@ -184,9 +181,9 @@ namespace Grupp_14_Lagerhantering
             }
             return hogstaID;
         }
-        
+
         // Lägger till produkt genom att fråga användaren om produkten och läsa in svaret
-        // nyttID ökar ID numret med 1
+        // nyttID hämtar högsta ID och lägger till 1 för att få nästa ID
         //AppendAllText lägger till den nya produkten i filen
         static void LäggTillProdukt(List<Produkt> lager)
         {
@@ -211,8 +208,13 @@ namespace Grupp_14_Lagerhantering
 
             lager.Add(nyProdukt);
 
-            string rad = nyProdukt.RetunerarRadTillFil();
+            string rad = nyProdukt.ReturnerarRadTillFil();
             File.AppendAllText("Lagervarde.txt", rad + Environment.NewLine);
+        }
+
+        static void SökProdukt()
+        {
+            Console.WriteLine("to be continued");
         }
     }
 }
