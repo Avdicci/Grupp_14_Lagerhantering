@@ -79,7 +79,11 @@ namespace Grupp_14_Lagerhantering
                         break;
                     // Här behöver vi skriva ut alla mätvärden i listan, det kan göras i en foreach loop
                     case "C":
-                        FinnHögstaID(lager);
+                        LäggTillProdukt(lager);
+                        foreach (Produkt p in lager)
+                        {
+                            p.SkrivUt();
+                        }
                         // Lägg till en ny produkt i lagret och spara med append
                         break;
                     case "D":
@@ -167,9 +171,9 @@ namespace Grupp_14_Lagerhantering
             }
 
         }
-        static void FinnHögstaID(List<Produkt> lager)
+        static int FinnHögstaID(List<Produkt> lager)
         {
-            double hogstaID = double.MinValue;
+            int hogstaID = int.MinValue;
 
             foreach (Produkt p in lager)
             {
@@ -178,7 +182,37 @@ namespace Grupp_14_Lagerhantering
                     hogstaID = p.Id;
                 }
             }
-            Console.WriteLine("Det högsta ID numret är: " + hogstaID);
+            return hogstaID;
+        }
+        
+        // Lägger till produkt genom att fråga användaren om produkten och läsa in svaret
+        // nyttID ökar ID numret med 1
+        //AppendAllText lägger till den nya produkten i filen
+        static void LäggTillProdukt(List<Produkt> lager)
+        {
+            int nyttID = FinnHögstaID(lager) + 1;
+
+            Console.Write("Skriv in namn på varan: ");
+            string namn = Console.ReadLine();
+
+            Console.Write("Skriv pris på varan: ");
+            double pris = double.Parse(Console.ReadLine());
+
+            Console.Write("Skriv in antal: ");
+            int antal = int.Parse(Console.ReadLine());
+
+            Produkt nyProdukt = new Produkt
+            {
+                Id = nyttID,
+                Namn = namn,
+                Pris = pris,
+                Antal = antal,
+            };
+
+            lager.Add(nyProdukt);
+
+            string rad = nyProdukt.RetunerarRadTillFil();
+            File.AppendAllText("Lagervarde.txt", rad + Environment.NewLine);
         }
     }
 }
