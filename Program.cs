@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
+using System.Text.Encodings.Web;
 namespace Grupp_14_Lagerhantering
 {
     public struct Produkt     // Produkt är för hur en produkt ser ut i lagret.
@@ -89,7 +91,7 @@ namespace Grupp_14_Lagerhantering
                         break;
                     case "E":
                         // Sök produkt
-                        SökProdukt();
+                        SökProdukt(lager);
                         break;
                     case "F":
                         // Tar bort en produkt via löpnummer
@@ -212,9 +214,27 @@ namespace Grupp_14_Lagerhantering
             File.AppendAllText("Lagervarde.txt", rad + Environment.NewLine);
         }
 
-        static void SökProdukt()
+        static void SökProdukt(List<Produkt> lager)
         {
-            Console.WriteLine("to be continued");
+            Console.Write("Skriv in sökord: ");
+            string söktText = Console.ReadLine();
+
+            bool finnsProdukt = false;
+
+            foreach (Produkt p in lager)
+            {
+                if (p.Namn.Contains(söktText)){
+                    p.SkrivUt();
+                    finnsProdukt = true;
+                }
+            }
+
+            if (!finnsProdukt)
+            {
+                Console.WriteLine("Ingen produkt hittades med det sökordet.");
+            }
+
+
         }
     }
 }
