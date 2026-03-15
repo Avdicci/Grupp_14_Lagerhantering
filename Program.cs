@@ -42,7 +42,6 @@ namespace Grupp_14_Lagerhantering
 
             while (avsluta == false)
             {
-                // Där det står "Whatever" får varje person ändra till det relevanta man jobbar med
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("=============================");
@@ -240,7 +239,6 @@ namespace Grupp_14_Lagerhantering
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("Skriv in sökord: ");
             Console.ResetColor();
-            string söktText = Console.ReadLine();
             string söktText = Console.ReadLine().ToLower();
 
             bool finnsProdukt = false;
