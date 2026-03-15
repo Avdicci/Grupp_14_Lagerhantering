@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.IO;
+using System.Linq.Expressions;
 using System.Text.Encodings.Web;
 namespace Grupp_14_Lagerhantering
 {
@@ -52,7 +53,7 @@ namespace Grupp_14_Lagerhantering
                 Console.WriteLine("A Läs in fil");
                 Console.WriteLine("B Visa alla produkter");
                 Console.WriteLine("C Lägg till Produkt");
-                Console.WriteLine("D Finn Högsta ID");
+                Console.WriteLine("D Redigera produkt");
                 Console.WriteLine("E Sök Produkt");
                 Console.WriteLine("F Ta bort produkt");
                 Console.WriteLine("G Sortera lager");
@@ -71,7 +72,7 @@ namespace Grupp_14_Lagerhantering
                 switch (menyVal)
                 {
                     case "A":
-                        // Samma som Duggan, vi behöver läsa in filen och spara datan i en lista
+                        // Läsa in filen och spara datan i en lista
                         if (!File.Exists(filSökVäg))
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
@@ -99,8 +100,8 @@ namespace Grupp_14_Lagerhantering
                         // Lägg till en ny produkt i lagret och spara med append
                         break;
                     case "D":
-                        // Söker efter högsta ID i lagret och returnerar det
-                        Console.WriteLine("Högsta ID: " + FinnHögstaID(lager));
+                        // Redigerar en befintlig produkt via löpnummer och sparar hela listan till filen
+                        RedigeraProdukt(lager, filSökVäg);
                         break;
                     case "E":
                         // Sök produkt
@@ -164,25 +165,37 @@ namespace Grupp_14_Lagerhantering
         {
             lager.Clear();
 
-            string[] rader = File.ReadAllLines(filSökVäg);
-            foreach (string rad in rader)
+            try
             {
-                string[] data = rad.Split(';');
 
-                int Id = int.Parse(data[0]);
-                string Namn = data[1];
-                double Pris = double.Parse(data[2]);
-                int Antal = int.Parse(data[3]);
-
-                Produkt p = new Produkt
+                string[] rader = File.ReadAllLines(filSökVäg);
+                foreach (string rad in rader)
                 {
-                    Id = Id,
-                    Namn = Namn,
-                    Pris = Pris,
-                    Antal = Antal
-                };
-                lager.Add(p);
+                    string[] data = rad.Split(';');
+
+                    int Id = int.Parse(data[0]);
+                    string Namn = data[1];
+                    double Pris = double.Parse(data[2]);
+                    int Antal = int.Parse(data[3]);
+
+                    Produkt p = new Produkt
+                    {
+                        Id = Id,
+                        Namn = Namn,
+                        Pris = Pris,
+                        Antal = Antal
+                    };
+                    lager.Add(p);
+                }
             }
+            catch (Exception fel)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Fel vid inläsning av fil: " + fel.Message);
+                Console.ResetColor();
+            }
+            
+
         }
 
         static int FinnHögstaID(List<Produkt> lager)
@@ -232,6 +245,114 @@ namespace Grupp_14_Lagerhantering
 
             string rad = nyProdukt.ReturnerarRadTillFil();
             File.AppendAllText("Lagervarde.txt", rad + Environment.NewLine);
+        }
+
+        static void RedigeraProdukt(List<Produkt> lager, string filSökVäg)
+        {
+            // Fråga användaren efter ID på produkten som ska redigeras
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Ange ID på produkten du vill redigera: ");
+            Console.ResetColor();
+            int söktId;
+            while (!int.TryParse(Console.ReadLine(), out söktId))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("Ogiltigt ID. Ange ett giltigt ID: ");
+                Console.ResetColor();
+            }
+
+            //Leta efter produkten i listan
+            int index = -1;
+            for (int i = 0; i < lager.Count; i++)
+            {
+                if (lager[i].Id == söktId)
+                {
+                    index = i;
+                    break;
+                }
+
+            }
+
+            // Om produkten inte hittades
+            if (index == -1)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Ingen produkt hittades med det ID:t.");
+                Console.ResetColor();
+                return;
+            }
+
+            // Fråga efter nytt namn
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Nytt namn (enter för att behålla): ");
+            Console.ResetColor();
+            string namn = Console.ReadLine();
+            if (namn == "")
+            {
+                namn = lager[index].Namn;
+            }
+
+            // Fråga efter nytt pris
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Nytt pris (enter för att behålla): ");
+            Console.ResetColor();
+            string prisText = Console.ReadLine();
+            double pris;
+            if (prisText == "")
+            {
+                pris = lager[index].Pris;
+            }
+            else
+            {
+                while (!double.TryParse(prisText, out pris))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("Ogiltigt pris, försök igen: ");
+                    Console.ResetColor();
+                    prisText = Console.ReadLine();
+                }
+            }
+
+            // Fråga efter nytt antal
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Nytt antal (enter för att behålla): ");
+            Console.ResetColor();
+
+            string antalText = Console.ReadLine();
+            int antal;
+            if (antalText == "")
+            {
+                antal = lager[index].Antal;
+            }
+            else
+            {
+                while (!int.TryParse(antalText, out antal))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("Ogiltigt antal, försök igen: ");
+                    Console.ResetColor();
+                    antalText = Console.ReadLine();
+                }
+            }
+
+            // Skapa en kopia av produkten med nya värden och lägg tillbaka i listan
+            Produkt redigerad = lager[index];
+            redigerad.Namn = namn;
+            redigerad.Pris = pris;
+            redigerad.Antal = antal;
+            lager[index] = redigerad;
+
+            // Spara hela listan till filen
+            StreamWriter writer = new StreamWriter(filSökVäg);
+            foreach (Produkt p in lager)
+            {
+                writer.WriteLine(p.ReturnerarRadTillFil());
+            }
+            writer.Close();
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("✓ Produkt redigerad!");
+            Console.ResetColor();
         }
 
         static void SökProdukt(List<Produkt> lager)
