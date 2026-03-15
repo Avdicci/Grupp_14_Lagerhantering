@@ -44,6 +44,12 @@ namespace Grupp_14_Lagerhantering
             {
                 // Där det står "Whatever" får varje person ändra till det relevanta man jobbar med
                 Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("=============================");
+                Console.WriteLine("     LAGERHANTERINGSSYSTEM   ");
+                Console.WriteLine("=============================");
+                Console.ResetColor();
+
                 Console.WriteLine("A Läs in fil");
                 Console.WriteLine("B Visa alla produkter");
                 Console.WriteLine("C Lägg till Produkt");
@@ -53,6 +59,11 @@ namespace Grupp_14_Lagerhantering
                 Console.WriteLine("G Sortera lager");
                 Console.WriteLine("H Skapa fil");
                 Console.WriteLine("X Avsluta");
+
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("-----------------------------");
+                Console.ResetColor();
+
                 Console.Write("Ange val: ");
 
                 menyVal = Console.ReadLine().ToUpper();
@@ -64,11 +75,15 @@ namespace Grupp_14_Lagerhantering
                         // Samma som Duggan, vi behöver läsa in filen och spara datan i en lista
                         if (!File.Exists(filSökVäg))
                         {
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("Filen finns inte. Skapa filen först (H).");
+                            Console.ResetColor();
                             break;
                         }
                         LäsInFrånFil(lager, filSökVäg);
-                        Console.WriteLine("Fil inläst");
+                        Console.ForegroundColor= ConsoleColor.Green;
+                        Console.WriteLine("✓ Fil inläst");
+                        Console.ResetColor();
                         break;
                     case "B":
                         foreach (Produkt p in lager)
@@ -79,10 +94,9 @@ namespace Grupp_14_Lagerhantering
                     // Här behöver vi skriva ut alla mätvärden i listan, det kan göras i en foreach loop
                     case "C":
                         LäggTillProdukt(lager);
-                        foreach (Produkt p in lager)
-                        {
-                            p.SkrivUt();
-                        }
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("✓ Produkt tillagd!");
+                        Console.ResetColor();
                         // Lägg till en ny produkt i lagret och spara med append
                         break;
                     case "D":
@@ -143,8 +157,9 @@ namespace Grupp_14_Lagerhantering
                 writer.WriteLine(rad);
             }
             writer.Close();
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Filen har återskapats med 10 produkter");
-
+            Console.ResetColor();
         }
         static void LäsInFrånFil(List<Produkt> lager, string filSökVäg)
         {
@@ -191,14 +206,19 @@ namespace Grupp_14_Lagerhantering
         static void LäggTillProdukt(List<Produkt> lager)
         {
             int nyttID = FinnHögstaID(lager) + 1;
-
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("Skriv in namn på varan: ");
+            Console.ResetColor();
             string namn = Console.ReadLine();
 
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("Skriv pris på varan: ");
+            Console.ResetColor();
             double pris = double.Parse(Console.ReadLine());
 
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("Skriv in antal: ");
+            Console.ResetColor();
             int antal = int.Parse(Console.ReadLine());
 
             Produkt nyProdukt = new Produkt
@@ -216,8 +236,11 @@ namespace Grupp_14_Lagerhantering
         }
 
         static void SökProdukt(List<Produkt> lager)
-        {
+        {   
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("Skriv in sökord: ");
+            Console.ResetColor();
+            string söktText = Console.ReadLine();
             string söktText = Console.ReadLine().ToLower();
 
             bool finnsProdukt = false;
@@ -232,7 +255,9 @@ namespace Grupp_14_Lagerhantering
 
             if (!finnsProdukt)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Ingen produkt hittades med det sökordet.");
+                Console.ResetColor();
             }
         }
 
