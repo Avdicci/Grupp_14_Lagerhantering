@@ -201,8 +201,10 @@ namespace Grupp_14_Lagerhantering
 
         static int FinnHögstaID(List<Produkt> lager)
         {
+            //Hitta minsta ID i listan
             int hogstaID = int.MinValue;
 
+            // Loopa och jämför varje produkts ID med det bredvid, erkätt med det större.
             foreach (Produkt p in lager)
             {
                 if (p.Id > hogstaID)
@@ -217,7 +219,7 @@ namespace Grupp_14_Lagerhantering
         // nyttID hämtar högsta ID och lägger till 1 för att få nästa ID
         //AppendAllText lägger till den nya produkten i filen
         static void LäggTillProdukt(List<Produkt> lager)
-        {
+        {   
             int nyttID = FinnHögstaID(lager) + 1;
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("Skriv in namn på varan: ");
@@ -358,22 +360,24 @@ namespace Grupp_14_Lagerhantering
 
         static void SökProdukt(List<Produkt> lager)
         {
+            // Fråga användaren efter sökord
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("Skriv in sökord: ");
             Console.ResetColor();
             string söktText = Console.ReadLine().ToLower();
 
+            // Loopa igenom listan och jämför sökordet med varje produkts namn
             bool finnsProdukt = false;
-
             foreach (Produkt p in lager)
             {
+                // När den hittar, skriv ut och avsluta loopen
                 if (p.Namn.Contains(söktText))
                 {
                     p.SkrivUt();
                     finnsProdukt = true;
                 }
             }
-
+            //Om den inte hittar någon produkt, skriv ut ett meddelande
             if (!finnsProdukt)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -493,12 +497,13 @@ namespace Grupp_14_Lagerhantering
                 Console.WriteLine("✓ Lagret sorterat på ID!");
                 Console.ResetColor();
             }
-             else
+            else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Ogiltigt val, försök igen.");
                 Console.ResetColor();
             }
+
         }
 
 
