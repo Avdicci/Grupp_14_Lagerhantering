@@ -81,7 +81,7 @@ namespace Grupp_14_Lagerhantering
                             break;
                         }
                         LäsInFrånFil(lager, filSökVäg);
-                        Console.ForegroundColor= ConsoleColor.Green;
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("✓ Fil inläst");
                         Console.ResetColor();
                         break;
@@ -112,6 +112,7 @@ namespace Grupp_14_Lagerhantering
                         TaBortProdukt(lager, filSökVäg);
                         break;
                     case "G":
+                        SorteraLager(lager);
                         // Sortera lagret på namn eller pris
                         break;
                     case "H":
@@ -194,7 +195,7 @@ namespace Grupp_14_Lagerhantering
                 Console.WriteLine("Fel vid inläsning av fil: " + fel.Message);
                 Console.ResetColor();
             }
-            
+
 
         }
 
@@ -356,7 +357,7 @@ namespace Grupp_14_Lagerhantering
         }
 
         static void SökProdukt(List<Produkt> lager)
-        {   
+        {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("Skriv in sökord: ");
             Console.ResetColor();
@@ -366,7 +367,8 @@ namespace Grupp_14_Lagerhantering
 
             foreach (Produkt p in lager)
             {
-                if (p.Namn.Contains(söktText)){
+                if (p.Namn.Contains(söktText))
+                {
                     p.SkrivUt();
                     finnsProdukt = true;
                 }
@@ -387,7 +389,7 @@ namespace Grupp_14_Lagerhantering
             // Läs in användarens svar från Console.ReadLine()
             int söktNamn;
 
-            try 
+            try
             {
                 söktNamn = int.Parse(Console.ReadLine());
             }
@@ -409,7 +411,7 @@ namespace Grupp_14_Lagerhantering
                 if (lager[i].Id == söktNamn)
                 {
                     // spara positionen (indexet) i listan
-                    index = i; 
+                    index = i;
 
                     // avbryt loopen eftersom vi hittat rätt produkt
                     break;
@@ -429,7 +431,7 @@ namespace Grupp_14_Lagerhantering
             {
                 // använd RemoveAt(index) för att ta bort produkten från listan
                 lager.RemoveAt(index);
-                    // Efter borttagningen behöver textfilen uppdateras
+                // Efter borttagningen behöver textfilen uppdateras
                 StreamWriter writer = new StreamWriter(filSökVäg);
 
                 // Gå igenom listan igen med en loop
@@ -447,7 +449,60 @@ namespace Grupp_14_Lagerhantering
 
         }
 
+        // Sortera på namn
+        static int JämförNamn(Produkt p1, Produkt p2)
+        {
+            return p1.Namn.CompareTo(p2.Namn);
+        }
+        // Sortera på pris
+        static int JämförPris(Produkt p1, Produkt p2)
+        {
+            return p1.Pris.CompareTo(p2.Pris);
+        }
+        // Sortera på ID, eftersom det är passande att ha med enligt mig (Zejd.A)
+        static int JämförID(Produkt p1, Produkt p2)
+        {
+            return p1.Id.CompareTo(p2.Id);
+        }
+        static void SorteraLager(List<Produkt> lager)
+        {
+            Console.WriteLine("Vill du sortera på Namn (N), Pris (P), eller ID (ID)");
+            string val = Console.ReadLine().ToLower();
+
+            if (val == "n")
+            {
+                // Sortera på namn
+                lager.Sort(JämförNamn);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("✓ Lagret sorterat på namn!");
+                Console.ResetColor();
+            }
+            else if (val == "p")
+            {
+                // Sortera på pris
+                lager.Sort(JämförPris);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("✓ Lagret sorterat på pris!");
+                Console.ResetColor();
+            }
+            // Jag (Zejd.A) tycker personligen att man ska kunna sortera på ID
+            else if (val == "id")
+            {
+                lager.Sort(JämförID);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("✓ Lagret sorterat på ID!");
+                Console.ResetColor();
+            }
+             else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Ogiltigt val, försök igen.");
+                Console.ResetColor();
+            }
+        }
+
 
 
     }
+
 }
