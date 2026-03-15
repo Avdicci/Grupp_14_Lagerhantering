@@ -239,9 +239,19 @@ namespace Grupp_14_Lagerhantering
         static void TaBortProdukt(List<Produkt> lager, string filSökVäg)
         {
             // Fråga användaren vilket ID eller namn på produkten som ska tas bort
-            Console.WriteLine("Vilken Produkt vill du ta bort? ");
+            Console.WriteLine("Vilken Produkt vill du ta bort? (ID): ");
             // Läs in användarens svar från Console.ReadLine()
-            string söktNamn = Console.ReadLine();
+            int söktNamn;
+
+            try 
+            {
+                söktNamn = int.Parse(Console.ReadLine());
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Ogiltigt format. Vänligen ange ett giltigt ID.");
+                return;
+            }
 
             // Skapa en variabel som ska lagra indexet för produkten i 
             // Sätt den först till ett värde som betyder "inte hittad", t.ex. -1
@@ -252,7 +262,7 @@ namespace Grupp_14_Lagerhantering
             {
                 // För varje produkt i listan: jämför användarens söktext med produktens namn eller ID
                 // Om produkten matchar:
-                if (lager[i].Namn.ToLower() == söktNamn)
+                if (lager[i].Id == söktNamn)
                 {
                     // spara positionen (indexet) i listan
                     index = i; 
