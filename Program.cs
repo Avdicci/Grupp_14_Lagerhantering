@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Collections.Generic;
 namespace Grupp_14_Lagerhantering
 {
     public struct Produkt     // Produkt är för hur en produkt ser ut i lagret.
