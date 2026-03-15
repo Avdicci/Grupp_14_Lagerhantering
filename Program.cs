@@ -95,6 +95,7 @@ namespace Grupp_14_Lagerhantering
                         break;
                     case "F":
                         // Tar bort en produkt via löpnummer
+                        TaBortProdukt(lager, filSökVäg);
                         break;
                     case "G":
                         // Sortera lagret på namn eller pris
@@ -217,7 +218,7 @@ namespace Grupp_14_Lagerhantering
         static void SökProdukt(List<Produkt> lager)
         {
             Console.Write("Skriv in sökord: ");
-            string söktText = Console.ReadLine();
+            string söktText = Console.ReadLine().ToLower();
 
             bool finnsProdukt = false;
 
@@ -233,8 +234,76 @@ namespace Grupp_14_Lagerhantering
             {
                 Console.WriteLine("Ingen produkt hittades med det sökordet.");
             }
+        }
 
+        static void TaBortProdukt(List<Produkt> lager, string filSökVäg)
+        {
+            // Fråga användaren vilket ID eller namn på produkten som ska tas bort
+            Console.WriteLine("Vilken Produkt vill du ta bort? (ID): ");
+            // Läs in användarens svar från Console.ReadLine()
+            int söktNamn;
+
+            try 
+            {
+                söktNamn = int.Parse(Console.ReadLine());
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Ogiltigt format. Vänligen ange ett giltigt ID.");
+                return;
+            }
+
+            // Skapa en variabel som ska lagra indexet för produkten i 
+            // Sätt den först till ett värde som betyder "inte hittad", t.ex. -1
+            int index = -1;
+
+            // Gå igenom hela listan med en loop (t.ex. for eller foreach)
+            for (int i = 0; i < lager.Count; i++)
+            {
+                // För varje produkt i listan: jämför användarens söktext med produktens namn eller ID
+                // Om produkten matchar:
+                if (lager[i].Id == söktNamn)
+                {
+                    // spara positionen (indexet) i listan
+                    index = i; 
+
+                    // avbryt loopen eftersom vi hittat rätt produkt
+                    break;
+                }
+
+            }
+            // Efter loopen: kontrollera om indexet fortfarande är -1
+            // Om det är -1 betyder det att ingen produkt hittades
+            if (index == -1)
+            {
+                // Om produkten inte hittades:
+                // skriv ut ett meddelande till användaren
+                Console.WriteLine("Produkten hittades inte :(");
+            }
+            // Om produkten hittades:
+            else
+            {
+                // använd RemoveAt(index) för att ta bort produkten från listan
+                lager.RemoveAt(index);
+                    // Efter borttagningen behöver textfilen uppdateras
+                StreamWriter writer = new StreamWriter(filSökVäg);
+
+                // Gå igenom listan igen med en loop
+                foreach (Produkt p in lager)
+                {
+                    // För varje produkt i listan: skriv en rad till filen
+                    // Använd metoden som returnerar produkten i filformat
+                    writer.WriteLine(p.ReturnerarRadTillFil());
+                }
+                // Stäng filen
+                writer.Close();
+                // Skriv ut ett meddelande till användaren att produkten har tagits bort
+                Console.WriteLine("Produkten har tagits bort");
+            }
 
         }
+
+
+
     }
 }
