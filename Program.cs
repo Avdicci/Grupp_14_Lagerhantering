@@ -218,8 +218,15 @@ namespace Grupp_14_Lagerhantering
             Console.Write("Skriv in namn på varan: ");
             Console.ResetColor();
             string namn = Console.ReadLine();
+            while (namn == "")
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Namnet får inte vara tomt, försök igen.");
+                Console.ResetColor();
+                namn = Console.ReadLine();
+            }
 
-            double pris;
+                double pris;
             while (true)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
@@ -231,8 +238,10 @@ namespace Grupp_14_Lagerhantering
                     break;
                 }
                 else
-                {
+                {   
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Ogiltigt pris, försök igen");
+                    Console.ResetColor();
                 }
             }
             int antal;
@@ -248,7 +257,9 @@ namespace Grupp_14_Lagerhantering
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Ogiltigt antal, försök igen");
+                    Console.ResetColor();
                 }
             }
 
