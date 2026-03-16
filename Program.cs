@@ -1,7 +1,4 @@
-﻿using System.Globalization;
-using System.IO;
-using System.Linq.Expressions;
-using System.Text.Encodings.Web;
+﻿using System.IO;
 namespace Grupp_14_Lagerhantering
 {
     public struct Produkt     // Produkt är för hur en produkt ser ut i lagret.
@@ -67,7 +64,7 @@ namespace Grupp_14_Lagerhantering
                 Console.Write("Ange val: ");
 
                 menyVal = Console.ReadLine().ToUpper();
-                Console.Write(""); // Tom rad för designs skull
+                Console.WriteLine(); // Tom rad för designs skull
 
                 switch (menyVal)
                 {
@@ -93,8 +90,15 @@ namespace Grupp_14_Lagerhantering
                         break;
                     // Här behöver vi skriva ut alla mätvärden i listan, det kan göras i en foreach loop
                     case "C":
+<<<<<<< Nuran/Skriver-Ut-Nyprodukt
                         LäggTillProdukt(lager);
 
+=======
+                        LäggTillProdukt(lager, filSökVäg);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("✓ Produkt tillagd!");
+                        Console.ResetColor();
+>>>>>>> main
                         // Lägg till en ny produkt i lagret och spara med append
                         break;
                     case "D":
@@ -199,7 +203,7 @@ namespace Grupp_14_Lagerhantering
 
         static int FinnHögstaID(List<Produkt> lager)
         {
-            //Hitta minsta ID i listan
+            //Hitta minsta värdet, för att sedan jämföra och lägga till det högsta
             int hogstaID = int.MinValue;
 
             // Loopa och jämför varje produkts ID med det bredvid, ersätt med det större.
@@ -216,7 +220,7 @@ namespace Grupp_14_Lagerhantering
         // Lägger till produkt genom att fråga användaren om produkten och läsa in svaret
         // nyttID hämtar högsta ID och lägger till 1 för att få nästa ID
         //AppendAllText lägger till den nya produkten i filen
-        static void LäggTillProdukt(List<Produkt> lager)
+        static void LäggTillProdukt(List<Produkt> lager, string filSökVäg)
         {   
             int nyttID = FinnHögstaID(lager) + 1;
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -245,6 +249,7 @@ namespace Grupp_14_Lagerhantering
             lager.Add(nyProdukt);
 
             string rad = nyProdukt.ReturnerarRadTillFil();
+<<<<<<< Nuran/Skriver-Ut-Nyprodukt
             File.AppendAllText("Lagervarde.txt", rad + Environment.NewLine);
 
             Console.ForegroundColor = ConsoleColor.Green;
@@ -253,6 +258,9 @@ namespace Grupp_14_Lagerhantering
             
             Console.WriteLine($"{nyProdukt.Namn}; {nyProdukt.Pris} kr; {nyProdukt.Antal} st;");
 
+=======
+            File.AppendAllText(filSökVäg, rad + Environment.NewLine);
+>>>>>>> main
         }
 
         static void RedigeraProdukt(List<Produkt> lager, string filSökVäg)
@@ -376,7 +384,7 @@ namespace Grupp_14_Lagerhantering
             foreach (Produkt p in lager)
             {
                 // När den hittar, skriv ut och avsluta loopen
-                if (p.Namn.Contains(söktText))
+                if (p.Namn.ToLower().Contains(söktText))
                 {
                     p.SkrivUt();
                     finnsProdukt = true;
