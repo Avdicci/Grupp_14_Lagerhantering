@@ -228,15 +228,39 @@ namespace Grupp_14_Lagerhantering
             Console.ResetColor();
             string namn = Console.ReadLine();
 
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("Skriv pris på varan: ");
-            Console.ResetColor();
-            double pris = double.Parse(Console.ReadLine());
+            double pris;
+            while (true)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("Skriv pris på varan: ");
+                Console.ResetColor();
 
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("Skriv in antal: ");
-            Console.ResetColor();
-            int antal = int.Parse(Console.ReadLine());
+                if (double.TryParse(Console.ReadLine(), out pris))
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Ogiltigt pris, försök igen");
+                }
+            }
+
+            int antal;
+            while (true)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("Skriv in antal: ");
+                Console.ResetColor();
+
+                if (int.TryParse(Console.ReadLine(), out antal))
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Ogiltigt pris, försök igen");
+                }
+            }
 
             Produkt nyProdukt = new Produkt
             {
