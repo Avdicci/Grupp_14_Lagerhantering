@@ -93,7 +93,7 @@ namespace Grupp_14_Lagerhantering
                         break;
                     // Här behöver vi skriva ut alla mätvärden i listan, det kan göras i en foreach loop
                     case "C":
-                        LäggTillProdukt(lager);
+                        LäggTillProdukt(lager, filSökVäg);
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("✓ Produkt tillagd!");
                         Console.ResetColor();
@@ -201,7 +201,7 @@ namespace Grupp_14_Lagerhantering
 
         static int FinnHögstaID(List<Produkt> lager)
         {
-            //Hitta minsta ID i listan
+            //Hitta högsta ID i listan
             int hogstaID = int.MinValue;
 
             // Loopa och jämför varje produkts ID med det bredvid, erkätt med det större.
@@ -218,7 +218,7 @@ namespace Grupp_14_Lagerhantering
         // Lägger till produkt genom att fråga användaren om produkten och läsa in svaret
         // nyttID hämtar högsta ID och lägger till 1 för att få nästa ID
         //AppendAllText lägger till den nya produkten i filen
-        static void LäggTillProdukt(List<Produkt> lager)
+        static void LäggTillProdukt(List<Produkt> lager, string filSökVäg)
         {   
             int nyttID = FinnHögstaID(lager) + 1;
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -247,7 +247,7 @@ namespace Grupp_14_Lagerhantering
             lager.Add(nyProdukt);
 
             string rad = nyProdukt.ReturnerarRadTillFil();
-            File.AppendAllText("Lagervarde.txt", rad + Environment.NewLine);
+            File.AppendAllText(filSökVäg, rad + Environment.NewLine);
         }
 
         static void RedigeraProdukt(List<Produkt> lager, string filSökVäg)
@@ -357,7 +357,8 @@ namespace Grupp_14_Lagerhantering
             Console.WriteLine("✓ Produkt redigerad!");
             Console.ResetColor();
         }
-
+        // Söker efter produkter i listan vars namn innehåller sökordet.
+        // Skriver ut alla matchande produkter, eller felmeddelande om ingen hittas.
         static void SökProdukt(List<Produkt> lager)
         {
             // Fråga användaren efter sökord
@@ -385,11 +386,15 @@ namespace Grupp_14_Lagerhantering
                 Console.ResetColor();
             }
         }
-
+        // Tar bort en produkt från listan och uppdaterar filen.
+        // Användaren anger ID på produkten som ska tas bort.
         static void TaBortProdukt(List<Produkt> lager, string filSökVäg)
         {
             // Fråga användaren vilket ID eller namn på produkten som ska tas bort
-            Console.WriteLine("Vilken Produkt vill du ta bort? (ID): ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Ange vilken Produkt vill du ta bort (ID): ");
+            Console.ResetColor();
+
             // Läs in användarens svar från Console.ReadLine()
             int söktNamn;
 
@@ -399,7 +404,9 @@ namespace Grupp_14_Lagerhantering
             }
             catch (FormatException)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Ogiltigt format. Vänligen ange ett giltigt ID.");
+                Console.ResetColor();
                 return;
             }
 
@@ -428,7 +435,9 @@ namespace Grupp_14_Lagerhantering
             {
                 // Om produkten inte hittades:
                 // skriv ut ett meddelande till användaren
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Produkten hittades inte :(");
+                Console.ResetColor();
             }
             // Om produkten hittades:
             else
@@ -448,29 +457,32 @@ namespace Grupp_14_Lagerhantering
                 // Stäng filen
                 writer.Close();
                 // Skriv ut ett meddelande till användaren att produkten har tagits bort
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Produkten har tagits bort");
+                Console.ResetColor();
             }
 
         }
 
-        // Sortera på namn
+        // Jämför två produkter alfabetiskt på namn, används av Sort().
+        // Returnerar negativt tal, noll eller positivt tal beroende på ordning.
         static int JämförNamn(Produkt p1, Produkt p2)
         {
             return p1.Namn.CompareTo(p2.Namn);
         }
-        // Sortera på pris
+        // Jämför två produkter på pris från lägst till högst, används av Sort().
+        // Returnerar negativt tal, noll eller positivt tal beroende på ordning.
         static int JämförPris(Produkt p1, Produkt p2)
         {
             return p1.Pris.CompareTo(p2.Pris);
         }
-        // Sortera på ID, eftersom det är passande att ha med enligt mig (Zejd.A)
-        static int JämförID(Produkt p1, Produkt p2)
-        {
-            return p1.Id.CompareTo(p2.Id);
-        }
+        // Låter användaren välja sorteringsordning och sorterar listan därefter.
+        // Sorterar antingen alfabetiskt på namn (N) eller pris lågt till högt (P).
         static void SorteraLager(List<Produkt> lager)
         {
-            Console.WriteLine("Vill du sortera på Namn (N), Pris (P), eller ID (ID)");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Vill du sortera alfabetiskt på namn (N) eller pris lågt till högt (P)?");
+            Console.ResetColor();
             string val = Console.ReadLine().ToLower();
 
             if (val == "n")
@@ -478,7 +490,7 @@ namespace Grupp_14_Lagerhantering
                 // Sortera på namn
                 lager.Sort(JämförNamn);
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("✓ Lagret sorterat på namn!");
+                Console.WriteLine("✓ Lagret sorterat alfabetiskt (A-Ö)!");
                 Console.ResetColor();
             }
             else if (val == "p")
@@ -486,15 +498,7 @@ namespace Grupp_14_Lagerhantering
                 // Sortera på pris
                 lager.Sort(JämförPris);
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("✓ Lagret sorterat på pris!");
-                Console.ResetColor();
-            }
-            // Jag (Zejd.A) tycker personligen att man ska kunna sortera på ID
-            else if (val == "id")
-            {
-                lager.Sort(JämförID);
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("✓ Lagret sorterat på ID!");
+                Console.WriteLine("✓ Lagret sorterat på pris (lägst till högst)!");
                 Console.ResetColor();
             }
             else
