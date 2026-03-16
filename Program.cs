@@ -90,7 +90,7 @@ namespace Grupp_14_Lagerhantering
                         break;
                     // Här behöver vi skriva ut alla mätvärden i listan, det kan göras i en foreach loop
                     case "C":
-                        LäggTillProdukt(lager);
+                        LäggTillProdukt(lager, filSökVäg);
                         // Lägg till en ny produkt i lagret och spara med append
                         break;
                     case "D":
