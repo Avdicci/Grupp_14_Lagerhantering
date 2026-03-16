@@ -1,7 +1,4 @@
-﻿using System.Globalization;
-using System.IO;
-using System.Linq.Expressions;
-using System.Text.Encodings.Web;
+﻿using System.IO;
 namespace Grupp_14_Lagerhantering
 {
     public struct Produkt     // Produkt är för hur en produkt ser ut i lagret.
@@ -67,7 +64,7 @@ namespace Grupp_14_Lagerhantering
                 Console.Write("Ange val: ");
 
                 menyVal = Console.ReadLine().ToUpper();
-                Console.Write(""); // Tom rad för designs skull
+                Console.WriteLine(); // Tom rad för designs skull
 
                 switch (menyVal)
                 {
@@ -93,10 +90,7 @@ namespace Grupp_14_Lagerhantering
                         break;
                     // Här behöver vi skriva ut alla mätvärden i listan, det kan göras i en foreach loop
                     case "C":
-                        LäggTillProdukt(lager, filSökVäg);
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("✓ Produkt tillagd!");
-                        Console.ResetColor();
+                        LäggTillProdukt(lager);
                         // Lägg till en ny produkt i lagret och spara med append
                         break;
                     case "D":
@@ -204,7 +198,7 @@ namespace Grupp_14_Lagerhantering
             //Hitta högsta ID i listan
             int hogstaID = int.MinValue;
 
-            // Loopa och jämför varje produkts ID med det bredvid, erkätt med det större.
+            // Loopa och jämför varje produkts ID med det bredvid, ersätt med det större.
             foreach (Produkt p in lager)
             {
                 if (p.Id > hogstaID)
@@ -226,15 +220,39 @@ namespace Grupp_14_Lagerhantering
             Console.ResetColor();
             string namn = Console.ReadLine();
 
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("Skriv pris på varan: ");
-            Console.ResetColor();
-            double pris = double.Parse(Console.ReadLine());
+            double pris;
+            while (true)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("Skriv pris på varan: ");
+                Console.ResetColor();
 
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("Skriv in antal: ");
-            Console.ResetColor();
-            int antal = int.Parse(Console.ReadLine());
+                if (double.TryParse(Console.ReadLine(), out pris))
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Ogiltigt pris, försök igen");
+                }
+            }
+
+            int antal;
+            while (true)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("Skriv in antal: ");
+                Console.ResetColor();
+
+                if (int.TryParse(Console.ReadLine(), out antal))
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Ogiltigt pris, försök igen");
+                }
+            }
 
             Produkt nyProdukt = new Produkt
             {
@@ -248,6 +266,15 @@ namespace Grupp_14_Lagerhantering
 
             string rad = nyProdukt.ReturnerarRadTillFil();
             File.AppendAllText(filSökVäg, rad + Environment.NewLine);
+          
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("✓ Produkt tillagd!");
+            Console.ResetColor();
+            
+            Console.WriteLine($"{nyProdukt.Namn}; {nyProdukt.Pris} kr; {nyProdukt.Antal} st;");
+
+            File.AppendAllText(filSökVäg, rad + Environment.NewLine);
+          
         }
 
         static void RedigeraProdukt(List<Produkt> lager, string filSökVäg)
@@ -372,7 +399,7 @@ namespace Grupp_14_Lagerhantering
             foreach (Produkt p in lager)
             {
                 // När den hittar, skriv ut och avsluta loopen
-                if (p.Namn.Contains(söktText))
+                if (p.Namn.ToLower().Contains(söktText))
                 {
                     p.SkrivUt();
                     finnsProdukt = true;
