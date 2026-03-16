@@ -196,8 +196,7 @@ namespace Grupp_14_Lagerhantering
         static int FinnHögstaID(List<Produkt> lager)
         {
             //Hitta högsta ID i listan
-            int hogstaID = int.MinValue;
-
+            int hogstaID = 0;
             // Loopa och jämför varje produkts ID med det bredvid, ersätt med det större.
             foreach (Produkt p in lager)
             {
@@ -227,7 +226,7 @@ namespace Grupp_14_Lagerhantering
                 Console.Write("Skriv pris på varan: ");
                 Console.ResetColor();
 
-                if (double.TryParse(Console.ReadLine(), out pris))
+                if (double.TryParse(Console.ReadLine(), out pris) && pris > 0)
                 {
                     break;
                 }
@@ -236,7 +235,6 @@ namespace Grupp_14_Lagerhantering
                     Console.WriteLine("Ogiltigt pris, försök igen");
                 }
             }
-
             int antal;
             while (true)
             {
@@ -244,13 +242,13 @@ namespace Grupp_14_Lagerhantering
                 Console.Write("Skriv in antal: ");
                 Console.ResetColor();
 
-                if (int.TryParse(Console.ReadLine(), out antal))
+                if (int.TryParse(Console.ReadLine(), out antal) && antal >= 0)
                 {
                     break;
                 }
                 else
                 {
-                    Console.WriteLine("Ogiltigt pris, försök igen");
+                    Console.WriteLine("Ogiltigt antal, försök igen");
                 }
             }
 
@@ -272,8 +270,6 @@ namespace Grupp_14_Lagerhantering
             Console.ResetColor();
             
             Console.WriteLine($"{nyProdukt.Namn}; {nyProdukt.Pris} kr; {nyProdukt.Antal} st;");
-
-            File.AppendAllText(filSökVäg, rad + Environment.NewLine);
           
         }
 
@@ -388,28 +384,48 @@ namespace Grupp_14_Lagerhantering
         // Skriver ut alla matchande produkter, eller felmeddelande om ingen hittas.
         static void SökProdukt(List<Produkt> lager)
         {
-            // Fråga användaren efter sökord
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("Skriv in sökord: ");
+            Console.Write("Skriv in sökord för namn: ");
             Console.ResetColor();
             string söktText = Console.ReadLine().ToLower();
 
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Ange maxpris: ");
+            Console.ResetColor();
+
+            string prisText = Console.ReadLine();
+            double maxPris = 0;
+            bool användPris = false;
+
+            if (prisText != "")
+            {
+                while (!double.TryParse(prisText, out maxPris))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("Ogiltigt pris, försök igen: ");
+                    Console.ResetColor();
+                    prisText = Console.ReadLine();
+                }
+                användPris = true;
+            }
+
             // Loopa igenom listan och jämför sökordet med varje produkts namn
             bool finnsProdukt = false;
+
             foreach (Produkt p in lager)
             {
-                // När den hittar, skriv ut och avsluta loopen
-                if (p.Namn.ToLower().Contains(söktText))
+                // Kontrollera namn + eventuellt pris
+                if (p.Namn.ToLower().Contains(söktText) && (!användPris || p.Pris <= maxPris))
                 {
                     p.SkrivUt();
                     finnsProdukt = true;
                 }
             }
-            //Om den inte hittar någon produkt, skriv ut ett meddelande
+
             if (!finnsProdukt)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Ingen produkt hittades med det sökordet.");
+                Console.WriteLine("Ingen produkt matchade båda villkoren.");
                 Console.ResetColor();
             }
         }
