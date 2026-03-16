@@ -90,10 +90,15 @@ namespace Grupp_14_Lagerhantering
                         break;
                     // Här behöver vi skriva ut alla mätvärden i listan, det kan göras i en foreach loop
                     case "C":
+<<<<<<< Nuran/Skriver-Ut-Nyprodukt
+                        LäggTillProdukt(lager);
+
+=======
                         LäggTillProdukt(lager, filSökVäg);
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("✓ Produkt tillagd!");
                         Console.ResetColor();
+>>>>>>> main
                         // Lägg till en ny produkt i lagret och spara med append
                         break;
                     case "D":
@@ -201,7 +206,7 @@ namespace Grupp_14_Lagerhantering
             //Hitta minsta värdet, för att sedan jämföra och lägga till det högsta
             int hogstaID = int.MinValue;
 
-            // Loopa och jämför varje produkts ID med det bredvid, erkätt med det större.
+            // Loopa och jämför varje produkts ID med det bredvid, ersätt med det större.
             foreach (Produkt p in lager)
             {
                 if (p.Id > hogstaID)
@@ -244,7 +249,18 @@ namespace Grupp_14_Lagerhantering
             lager.Add(nyProdukt);
 
             string rad = nyProdukt.ReturnerarRadTillFil();
+<<<<<<< Nuran/Skriver-Ut-Nyprodukt
+            File.AppendAllText("Lagervarde.txt", rad + Environment.NewLine);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("✓ Produkt tillagd!");
+            Console.ResetColor();
+            
+            Console.WriteLine($"{nyProdukt.Namn}; {nyProdukt.Pris} kr; {nyProdukt.Antal} st;");
+
+=======
             File.AppendAllText(filSökVäg, rad + Environment.NewLine);
+>>>>>>> main
         }
 
         static void RedigeraProdukt(List<Produkt> lager, string filSökVäg)
